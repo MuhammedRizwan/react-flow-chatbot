@@ -6,6 +6,7 @@ You can design chatbot logic visually using blocks like:
 
 - Start
 - Ask question
+- wait for user input
 - Validate user input
 - Save to database
 - AI-generated reply
@@ -24,7 +25,8 @@ The goal: **build chatbot logic like drawing a flowchart — then execute it.**
 | Node | Purpose |
 |------|--------|
 **Start** | Entry point of the flow  
-**Ask** | Ask the user something + store answer  
+**Ask** | Ask the user something + store answer 
+**User Input** | waiting for the user input 
 **Validation** | Check input (name rules, empty, etc.)  
 **Database** | Save or read values (user.name etc.)  
 **AI Node** | Generate replies using AI prompts  
