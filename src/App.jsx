@@ -16,9 +16,11 @@ import ReplyNode from './components/node/reply';
 import ValidationNode from './components/node/validation';
 import FallbackNode from './components/node/fallback';
 import ErrorNode from './components/node/error';
+import UserInputNode from './components/node/userInput';
 
 const nodeTypes = {
   ask: AskNode,
+  userInput: UserInputNode,
   reply: ReplyNode,
   ai: AiNode,
   database: DatabaseNode,
@@ -44,7 +46,7 @@ export default function App() {
       {
         id: "ask1",
         type: "ask",
-        position: { x: 60, y: 170 },
+        position: { x: 60, y: 140 },
         data: {
           question: "What is your name?",
           variable: "user.name",
@@ -52,16 +54,22 @@ export default function App() {
         }
       },
       {
+        id: "input1",
+        type: "userInput",
+        position: { x: 60, y: 320 },
+        data: { variable: "user.name" }
+      },
+      {
         id: "validate1",
         type: "validation",
-        position: { x: 700, y: 170 },
+        position: { x: 700, y: 320 },
         data: {}
       },
 
       {
         id: "db1",
         type: "database",
-        position: { x: 60, y: 380 },
+        position: { x: 60, y: 450 },
         data: {
           mode: "set",
           key: "user.name",
@@ -72,13 +80,13 @@ export default function App() {
       {
         id: "error1",
         type: "error",
-        position: { x: 700, y: 380 },
+        position: { x: 700, y: 450 },
         data: {}
       },
       {
         id: "ai1",
         type: "ai",
-        position: { x: 60, y: 620 },
+        position: { x: 60, y: 650 },
         data: {
           prompt: "Greet the user using user.name",
           onUpdate: (d) => onUpdateNodeData("ai1", d)
@@ -87,17 +95,19 @@ export default function App() {
       {
         id: "fallback1",
         type: "fallback",
-        position: { x: 700, y: 620 },
+        position: { x: 700, y: 650 },
         data: {}
       },
       { id: "reply", type: "output", position: { x: 60, y: 850 }, data: { label: "end" } },
     ]);
 
     setEdges([
-      { id: "e1", source: "start1", target: "ask1",style: { stroke: '#044b1aff' } },
+      { id: "e1", source: "start1", target: "ask1", style: { stroke: '#044b1aff' } },
 
       // ask → validation
-      { id: "e2", source: "ask1", target: "validate1", style: { stroke: '#044b1aff' } },
+      { id: "e2", source: "ask1", target: "input1", style: { stroke: '#044b1aff' } },
+      // user input → validation
+      { id: "e2-2", source: "input1", target: "validate1", style: { stroke: '#044b1aff' } },
 
       // validation pass → db
       { id: "e3", source: "validate1", sourceHandle: "pass", target: "db1", style: { stroke: '#044b1aff' } },
@@ -117,7 +127,7 @@ export default function App() {
       { id: "e8", source: "ai1", target: "fallback1", style: { stroke: '#b30b0bff' } },
 
       // fallback → ask again
-      { id: "e9", source: "fallback1", target: "ask1" , style: { stroke: '#9aaa41ff' } },
+      { id: "e9", source: "fallback1", target: "ask1", style: { stroke: '#9aaa41ff' } },
 
       // normal end
       { id: "e10", source: "ai1", target: "reply", style: { stroke: '#044b1aff' } },
